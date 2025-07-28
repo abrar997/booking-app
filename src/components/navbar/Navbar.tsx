@@ -27,7 +27,7 @@ const Navbar = () => {
           <h1
             className={`${
               isScrolled
-                ? "text-teal-600 font-bold text-2xl"
+                ? "text-red-600 font-bold text-2xl"
                 : "text-[#cec7c7] text-3xl font-bold"
             } transition-all duration-300`}
           >
@@ -35,14 +35,14 @@ const Navbar = () => {
           </h1>
           <AiOutlineHome
             size={25}
-            color={`${isScrolled ? "#015252" : "#cec7c7"}`}
+            color={`${isScrolled ? "#eb0844" : "#cec7c7"}`}
           />
         </Link>
         <div>
           <div className="cursor-pointer" onClick={toggleMode}>
             <AiOutlineUser
               size={`${isScrolled ? 25 : 30}`}
-              color={`${isScrolled ? "#015252" : "#cec7c7"}`}
+              color={`${isScrolled ? "#eb0844" : "#cec7c7"}`}
               className="transition-all duration-300"
             />
           </div>
@@ -54,7 +54,7 @@ const Navbar = () => {
               <Link href="/reservations">Reservations</Link>
               <button
                 onClick={() => signOut()}
-                className="text-[#015252] font-semibold"
+                className="text-[#eb0844] font-semibold"
               >
                 logout
               </button>
