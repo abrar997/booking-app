@@ -1,26 +1,184 @@
 @import "tailwindcss";
+@theme {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1362px;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-head: "pf-fuel-grime", sans-serif;
+  --font-campaign: "pf-fuel-decay", sans-serif;
+
+  --color-red-50: #fff0f2;
+  --color-red-100: #ffe1e5;
+  --color-red-200: #ffc8d1;
+  --color-red-300: #ff9bac;
+  --color-red-400: #ff6282;
+  --color-red-500: #ff2c5a;
+  --color-red-600: #eb0844;
+  --color-red-700: #d0003c;
+  --color-red-800: #ae033a;
+  --color-red-900: #940738;
+  --color-red-950: #53001a;
+
+  --color-yellow-50: #fcfcea;
+  --color-yellow-100: #f7f9c8;
+  --color-yellow-200: #f3f494;
+  --color-yellow-300: #eee856;
+  --color-yellow-400: #e8da35;
+  --color-yellow-500: #d7c01b;
+  --color-yellow-600: #b99815;
+  --color-yellow-700: #947014;
+  --color-yellow-800: #7b5818;
+  --color-yellow-900: #69491a;
+  --color-yellow-950: #3d270b;
+
+  --color-blue-50: #effefc;
+  --color-blue-100: #c8fff8;
+  --color-blue-200: #91fef4;
+  --color-blue-300: #52f6ec;
+  --color-blue-400: #30e4df;
+  --color-blue-500: #06c6c4;
+  --color-blue-600: #029e9f;
+  --color-blue-700: #067d7f;
+  --color-blue-800: #0b6064;
+  --color-blue-900: #0e5153;
+  --color-blue-950: #003033;
+
+  --color-brown-100: #fbf5f2;
+  --color-brown-500: #decbc0;
+  --color-brown-700: #4c4444;
+  --color-brown-950: #170202;
+
+  /* TODO: Need to adjust these vars later on in the project timeline */
+  --color-header: #decbc0;
+
+  /* BORDER RADIUS */
+  --radius-card: 8px;
+  --radius-button: 8px;
+  --radius-header: 12px;
+  --radius-search-input: 12px;
+  --radius-section: 12px;
+  --radius-footer: 12px;
+  --radius-header: 12px;
+
+  /* WIDTHS */
+  --spacing-search-content: 820px;
+
+  /* SHADOWS */
+  --shadow-2xs: 0 0 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-xs: 0 0 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 0 3px 0 rgb(0 0 0 / 0.1), 0 0 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 0 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 0 15px -3px rgb(0 0 0 / 0.1), 0 0 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 0 25px -5px rgb(0 0 0 / 0.1), 0 0 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 0 50px -12px rgb(0 0 0 / 0.25);
+  --inset-shadow-2xs: inset 0 1px rgb(0 0 0 / 0.05);
+  --inset-shadow-xs: inset 0 1px 1px rgb(0 0 0 / 0.05);
+  --inset-shadow-sm: inset 0 2px 4px rgb(0 0 0 / 0.05);
+  --drop-shadow-xs: 0 0 1px rgb(0 0 0 / 0.05);
+  --drop-shadow-sm: 0 0 2px rgb(0 0 0 / 0.15);
+  --drop-shadow-md: 0 0 3px rgb(0 0 0 / 0.12);
+  --drop-shadow-lg: 0 0 4px rgb(0 0 0 / 0.15);
+  --drop-shadow-xl: 0 0 7px rgb(0 0 0 / 0.1);
+  --drop-shadow-2xl: 0 0 25px rgb(0 0 0 / 0.15);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-body: --var(font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html,
+  body {
+    @apply font-body flex h-auto min-h-screen flex-col;
+  }
+
+  body {
+    @apply pt-9;
+  }
+
+  main {
+    @apply flex-1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+
+  h1 {
+    @apply text-[32px];
+  }
+
+  h2 {
+    @apply h2;
+  }
+
+  h3 {
+    @apply text-xl font-medium leading-tight;
+  }
+
+  p {
+    @apply text-lg leading-normal;
+  }
+
+  a {
+    @apply font-light;
+  }
+
+  .prose-content ul {
+    @apply list-disc pl-4;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  @media print {
+    .no-print {
+      display: none;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .content-block {
+    h2 {
+      @apply mb-3;
+    }
+  }
+
+  .video-container {
+    @apply relative w-full pt-[56.25%];
+
+    > div:first-child {
+      @apply absolute left-0 top-0 !h-full !w-full;
+    }
+  }
+}
+
+@utility container {
+  @apply mx-auto px-4;
+}
+
+@utility breakout {
+  @apply mx-auto w-full max-w-[1656px] px-8;
+}
+
+@utility h1 {
+  @apply text-[32px];
+}
+
+@utility h2 {
+  @apply text-2xl leading-tight xl:text-2xl;
+}
+
+@utility justify-self-anchor {
+  justify-self: anchor-center;
 }
