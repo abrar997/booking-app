@@ -8,6 +8,7 @@ import mumbai from "../../../public/assets/Mumbai.jpg";
 import paris from "../../../public/assets/paris.jpg";
 import baghdad from "../../../public/assets/baghdad.jpg";
 import Card from "./Card";
+import ComponentTitle from "../reusable/ComponentTitle";
 
 const popularLocationsData = [
   { city: "Erbil", image: erbil, numberOfPlaces: 90 },
@@ -22,12 +23,7 @@ const popularLocationsData = [
 const PopularLocations = () => {
   return (
     <div className="lg:p-12 px-4 py-8 grid gap-6">
-      <div>
-        <h2 className="text-lg font-semibold text-red-600">Explore Top</h2>
-        <h1 className="text-bold text-3xl capitalize font-bold">
-          Popular locations
-        </h1>
-      </div>
+      <ComponentTitle subTitle="Explore Top" title="Popular locations" />
 
       <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
         {popularLocationsData.map((city, index) => (
