@@ -20,8 +20,8 @@ const Card = ({
 }: CardProps) => {
   const currencyFormatter = require("currency-formatter");
   return (
-    <div
-      // href="/details/id"
+    <Link
+      href="/details/id"
       className="rounded group grid gap-4 shadow cursor-pointer hover:shadow-xl transition-all duration-700"
     >
       <div className="relative">
@@ -48,7 +48,7 @@ const Card = ({
           Book now
         </button>
       </div>
-    </div>
+    </Link>
   );
 };
 
