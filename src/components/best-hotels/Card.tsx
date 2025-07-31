@@ -21,7 +21,7 @@ const Card = ({
   const currencyFormatter = require("currency-formatter");
   return (
     <Link
-      href="/details/id"
+      href="/details/1"
       className="rounded group grid gap-4 shadow cursor-pointer hover:shadow-xl transition-all duration-700"
     >
       <div className="relative">
