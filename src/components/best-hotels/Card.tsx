@@ -22,7 +22,7 @@ const Card = ({
   return (
     <Link
       href="/details/1"
-      className="rounded group grid gap-4 shadow cursor-pointer hover:shadow-xl transition-all duration-700"
+      className="rounded grid gap-4 shadow cursor-pointer hover:shadow-xl transition-all duration-700"
     >
       <div className="relative">
         <Image src={image} alt="" className="rounded-t h-72 object-cover" />
@@ -44,7 +44,7 @@ const Card = ({
             <span className="lg:ml-1 text-sm">per night</span>
           </span>
         </div>
-        <button className="opacity-0 mt-2 group-hover:opacity-100 transition-all duration-300 hover bg-red-600 text-white font-semibold rounded px-4 py-2">
+        <button className="mt-2 transition-all hover:bg-red-400 duration-300 hover bg-red-600 text-white font-semibold rounded px-4 py-2">
           Book now
         </button>
       </div>
