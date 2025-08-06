@@ -94,10 +94,6 @@
     @apply font-body flex h-auto min-h-screen flex-col;
   }
 
-  body {
-    @apply pt-9;
-  }
-
   main {
     @apply flex-1;
   }

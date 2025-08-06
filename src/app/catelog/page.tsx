@@ -71,12 +71,12 @@ const page = () => {
         </h3>
       </div>
 
-      <div className="relative z-20 -mt-4 h-full w-full flex items-center justify-center">
+      <div className="relative z-20 -mt-12 h-full w-full flex items-center justify-center">
         <form
           action=""
-          className="flex gap-12 items-start absolute -top-12 w-2/3 h-28 p-4 rounded-lg bg-red-600 text-white"
+          className="flex lg:flex-nowrap flex-wrap z-40 lg:gap-12 gap-8 md:p-4 p-2 items-start absolute -top-12 lg:w-2/3 lg:h-28 lg:p-4 rounded-lg bg-red-600 text-white mx-2 lg:mx-0"
         >
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col lg:items-center gap-2">
             <h1 className="ml-1 text-xl font-semibold">City</h1>
 
             <Select
@@ -85,7 +85,7 @@ const page = () => {
             />
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col lg:items-center gap-2">
             <h3 className="ml-1 text-xl font-semibold">Price</h3>
             <div className="flex items-center gap-3">
               <Input
@@ -110,10 +110,10 @@ const page = () => {
           <Button
             text="Search"
             disabled={false}
-            className="mt-8 px-6 py-2 text-[16px] bg-red-100 text-red-600 rounded-lg"
+            className="lg:mt-8 mt-2 px-6 py-2 w-full text-[16px] bg-red-100 text-red-600 rounded-lg"
           />
         </form>
-        <div className="grid grid-cols-4 w-full mt-24 lg:p-12 justify-center items-center gap-14">
+        <div className="grid lg:grid-cols-4 grid-cols-2 w-full mt-86 md:mt-42 p-4 pb-12 lg:mt-24 lg:p-12 justify-center items-center lg:gap-14 gap-4">
           {data?.map((place, idx) => (
             <Card
               key={idx}
