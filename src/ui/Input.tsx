@@ -6,7 +6,7 @@ type InputProps = {
   className: string;
   id?: string;
   step?: undefined;
-  register?: () => void;
+  register?: any;
   isShadow: boolean;
 };
 const Input = ({

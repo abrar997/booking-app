@@ -1,8 +1,43 @@
 "use client";
+import React, { useState } from "react";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
-import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "./schema";
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 const page = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const Router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(schema) });
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    if (Object.keys(errors)?.length > 0) {
+      toast.error("Enter Valid Data");
+      return;
+    }
+    setIsLoading(true);
+
+    try {
+      const res = await signIn("credentials", { ...data, redirect: false });
+      if (res?.error == null) {
+        Router.push("/");
+      } else {
+        toast.error("Email or password in invalid");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex bg-[url('https://tse3.mm.bing.net/th/id/OIP.VRclq5ZnFRG3R1CjpuARHQHaE8?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3')] lg:items-center bg-[#e6e7ee] lg:justify-center lg:h-screen">
       <div className="w-full bg-[#e6e7eef1] h-screen lg:flex lg:items-center lg:justify-center">
@@ -24,20 +59,27 @@ const page = () => {
             </p>
           </div>
           <div>
-            <form action="" className="grid gap-4">
+            <form
+              action=""
+              className="grid gap-4"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <Input
                 type="email"
                 isShadow
                 className="p-3 focus:outline-0 w-full"
                 placeholder="ahmed997@gmail.com"
+                register={register("email")}
               />
               <Input
                 type="password"
                 isShadow
                 className="p-3 focus:outline-0 w-full"
                 placeholder="*******"
+                register={register("password")}
               />
               <Button
+                disabled={isLoading}
                 text="Submit"
                 className="bg-red-600 text-white rounded p-3 font-semibold capitalize hover:bg-red-700"
               />
