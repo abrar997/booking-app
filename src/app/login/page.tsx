@@ -18,7 +18,7 @@ const page = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit = async (data: any) => {
     if (Object.keys(errors)?.length > 0) {
       toast.error("Enter Valid Data");
       return;
@@ -26,11 +26,14 @@ const page = () => {
     setIsLoading(true);
 
     try {
-      const res = await signIn("credentials", { ...data, redirect: false });
+      const res = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
       if (res?.error == null) {
         Router.push("/");
       } else {
-        toast.error("Email or password in invalid");
+        toast.error("Email or password is invalid");
       }
     } catch (error) {
       console.log(error);
@@ -59,11 +62,7 @@ const page = () => {
             </p>
           </div>
           <div>
-            <form
-              action=""
-              className="grid gap-4"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
               <Input
                 type="email"
                 isShadow
@@ -71,6 +70,9 @@ const page = () => {
                 placeholder="ahmed997@gmail.com"
                 register={register("email")}
               />
+              <span className="text-sm text-red-600 capitalize tracking-wider">
+                {errors.email?.message}
+              </span>
               <Input
                 type="password"
                 isShadow
@@ -78,6 +80,9 @@ const page = () => {
                 placeholder="*******"
                 register={register("password")}
               />
+              <span className="text-sm text-red-600 capitalize tracking-wider">
+                {errors.password?.message}
+              </span>
               <Button
                 disabled={isLoading}
                 text="Submit"

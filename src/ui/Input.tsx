@@ -2,12 +2,12 @@ import React from "react";
 
 type InputProps = {
   type: string;
-  placeholder: string;
-  className: string;
+  placeholder?: string;
+  className?: string;
   id?: string;
-  step?: undefined;
+  step?: number;
   register?: any;
-  isShadow: boolean;
+  isShadow?: boolean;
 };
 const Input = ({
   type,

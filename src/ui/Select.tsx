@@ -2,7 +2,7 @@ import React from "react";
 
 type SelectProps = {
   data?: { value: string; text: string }[];
-  register?: () => void;
+  register?: any;
   className?: string;
 };
 

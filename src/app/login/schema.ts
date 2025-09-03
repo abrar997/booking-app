@@ -7,6 +7,6 @@ const schema = z.object({
     .email("Invalid email address"),
   password: z
     .string()
-    .min(6, { message: "PAssword must be at least 6 characters long" }),
+    .min(6, { message: "Password must be at least 6 characters long" }),
 });
 export { schema };

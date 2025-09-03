@@ -13,8 +13,16 @@ const Button = ({ text, handleSubmit, disabled, className }: ButtonProps) => {
     <button
       className={className ? className : defaultClassName}
       onClick={handleSubmit}
+      type="submit"
+      disabled={disabled}
     >
-      {disabled ? <Circles /> : text}
+      {disabled ? (
+        <span className="m-auto flex items-center justify-center">
+          <Circles color="white" />{" "}
+        </span>
+      ) : (
+        text
+      )}
     </button>
   );
 };

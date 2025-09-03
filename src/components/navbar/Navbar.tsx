@@ -28,21 +28,21 @@ const Navbar = () => {
             className={`${
               isScrolled
                 ? "text-red-600 font-bold text-2xl"
-                : "text-[#cec7c7] text-3xl font-bold"
+                : "text-[#5d5959] text-3xl font-bold"
             } transition-all duration-300`}
           >
             FlyUS
           </h1>
           <AiOutlineHome
             size={25}
-            color={`${isScrolled ? "#eb0844" : "#cec7c7"}`}
+            color={`${isScrolled ? "#eb0844" : "#5d5959"}`}
           />
         </Link>
         <div>
           <div className="cursor-pointer" onClick={toggleMode}>
             <AiOutlineUser
               size={`${isScrolled ? 25 : 30}`}
-              color={`${isScrolled ? "#eb0844" : "#cec7c7"}`}
+              color={`${isScrolled ? "#eb0844" : "#5d5959"}`}
               className="transition-all duration-300"
             />
           </div>

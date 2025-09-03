@@ -1,14 +1,8 @@
-import { User } from "@/generated/prisma/client";
+import bcrypt from "bcryptjs";
+import NextAuth, { SessionStrategy } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import db from "@/lib/db";
-import bcrypt from "bcrypt";
-import NextAuth, { SessionStrategy } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-interface CredentialsProps {
-  email: string;
-  password: string;
-}
 
 export const authOptions = {
   adapter: PrismaAdapter(db),
@@ -19,27 +13,21 @@ export const authOptions = {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
-      async authorize(
-        credentials: CredentialsProps | undefined,
-        _req
-      ): Promise<User | any> {
-        if (!credentials?.email || !credentials?.password) return null;
-
-        const user = await prisma?.user.findUnique({
+      async authorize(credentials) {
+        const { password, email } = credentials;
+        const user = await db.user.findUnique({
           where: {
-            email: credentials.email,
+            email: email,
           },
         });
 
         if (!user) {
-          throw new Error("Invalid Input");
+          throw new Error("Invalid user");
         }
-        const isCorrectPass = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
+        const isCorrectPass = await bcrypt.compare(password, user.password);
+
         if (!isCorrectPass) {
-          throw new Error("Invalid Input");
+          throw new Error("Invalid password");
         } else {
           const { password, ...currentUser } = user;
           return currentUser;
@@ -55,11 +43,14 @@ export const authOptions = {
     signIn: "/login",
   },
   callbacks: {
-    jwt({ token, user }: { token: any; user: any }) {
-      if (user) token.isAdmin = user.isAdmin;
-      return token;
+    jwt({ token, user }) {
+      if (user) {
+        token.isAdmin = user.isAdmin;
+
+        return token;
+      }
     },
-    session({ session, token }: any) {
+    session({ session, token }) {
       session.user.isAdmin = token.isAdmin;
       return session;
     },
@@ -67,4 +58,4 @@ export const authOptions = {
 };
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POT };
+export { handler as GET, handler as POST };

@@ -14,18 +14,18 @@ export const popularCities = [
   { city: "ankara", image: ankara },
 ];
 export const optionTypes = [
-  { value: "", text: "Luxury", image: "luxury" },
-  { value: "", text: "Budget", image: "budget" },
-  { value: "", text: "3 stars", image: "threeStars" },
-  { value: "", text: "4 stars", image: "fourStars" },
-  { value: "", text: "5 Start", image: "fiveStars" },
-  { value: "", text: "VIP", image: "vip" },
+  { text: "Luxury", value: "luxury" },
+  { text: "Budget", value: "budget" },
+  { text: "3 stars", value: "threeStars" },
+  { text: "4 stars", value: "fourStars" },
+  { text: "5 Start", value: "fiveStars" },
+  { text: "VIP", value: "vip" },
 ];
 export const optionLocations = [
-  { value: "", text: "Baghdad", image: "baghdad" },
-  { value: "", text: "Erbil", image: "erbil" },
-  { value: "", text: "Basra", image: "basra" },
-  { value: "", text: "Istanbul", image: "istanbul" },
-  { value: "", text: "ankara", image: "ankara" },
-  { value: "", text: "Amman", image: "amman" },
+  { text: "Baghdad", value: "baghdad" },
+  { text: "Erbil", value: "erbil" },
+  { text: "Basra", value: "basra" },
+  { text: "Istanbul", value: "istanbul" },
+  { text: "ankara", value: "ankara" },
+  { text: "Amman", value: "amman" },
 ];
