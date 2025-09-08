@@ -8,9 +8,6 @@ export async function POST(req: any) {
   try {
     const body = await req.json();
     const { email, username, password } = body;
-    // if (!username || !email || !password) {
-    //   return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-    // }
 
     const isExisting = await db.user.findUnique({
       where: {
@@ -25,7 +22,6 @@ export async function POST(req: any) {
       );
     }
 
-    // const hashedPassword =await bcrypt.hash(password, 10);
     const hashedPassword = await bcrypt.hash(password, 10);
     await db.user.create({
       data: { email, username, password: hashedPassword },

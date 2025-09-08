@@ -1,7 +1,7 @@
 "use client";
 import Input from "@/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { EventHandler, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { schema } from "./schema";
 import Select from "@/ui/Select";
@@ -10,6 +10,8 @@ import Button from "@/ui/Button";
 import toast from "react-hot-toast";
 
 const page = () => {
+  const imageRef = useRef(null);
+  const [images, setImages] = useState([]);
   const {
     register,
     handleSubmit,
@@ -26,12 +28,28 @@ const page = () => {
       pricePerNight: 400,
     },
   });
+  useEffect(() => {
+    console.log(images);
+  }, []);
 
-  const uploadImage = async (image: string, idx: number) => {
+  const uploadImages = (image: string, idx: string) => {
+    // need to get image from input
+    // group of images not one image
+    // save this images in imagekit as gallery
+    // save all data and images in db
+    // 1-image with url
     if (!image) return;
-    const toastId = toast.loading(`Image ${idx + 1} is being uploaded`);
+    const toastId = toast.loading(`image ${idx + 1} uploaded successfully`);
     const formData = new FormData();
     formData.append("file", image);
+  };
+
+  const handleChange = (e: any) => {
+    setImages((prev) => [...prev, e.target.files[0]]);
+  };
+
+  const onSubmit = (data: {}) => {
+    console.log(data);
   };
 
   return (
@@ -42,7 +60,11 @@ const page = () => {
             Create a listing
           </h3>
         </div>
-        <form action="" className="px-4 py-6 flex flex-col items-center gap-8">
+        <form
+          action=""
+          onSubmit={handleSubmit(onSubmit)}
+          className="px-4 py-6 flex flex-col items-center gap-8"
+        >
           <Input
             placeholder="Paradise"
             type="text"
@@ -79,17 +101,28 @@ const page = () => {
               id="freeWifi"
             />
           </div>
-          <div className="text-slate-400 ml-4 w-2/3 flex gap-1">
-            <label htmlFor="" className="text-slate-400 w-2/3 ml-4">
+          <div className="text-slate-400 w-2/3 flex gap-1">
+            <label
+              htmlFor=""
+              className="text-slate-400 border p-2 rounded w-2/3"
+            >
               upload images
             </label>
             <input
               type="file"
               className=""
               style={{ display: "none" }}
-              id="images"
-              onChange={() => {}}
+              ref={imageRef}
+              onChange={handleChange}
+              accept="images/"
             />
+            <button
+              onClick={() => {
+                imageRef.current.click();
+              }}
+            >
+              click
+            </button>
           </div>{" "}
           <Button
             text="Create"
