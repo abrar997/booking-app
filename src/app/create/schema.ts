@@ -8,7 +8,7 @@ const schema = z.object({
   hasFreeWifi: z.boolean().optional(),
   type: z.enum(optionTypes.map(({ value }) => value)),
   location: z.enum(optionLocations.map(({ value }) => value)),
-  pricePerNight: z
+  priceNight: z
     .number()
     .min(15, { message: "Price must be above $15" })
     .max(50555, { message: "Price can't be above 50000" }),

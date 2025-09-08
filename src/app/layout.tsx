@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import Toast from "@/utlis/toast";
+import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import QueryProvider from "./providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +33,7 @@ export default function RootLayout({
         `}
       >
         <Toast />
-        <LayoutProvider>{children}</LayoutProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

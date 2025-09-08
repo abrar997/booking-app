@@ -1,17 +1,21 @@
 "use client";
 import Input from "@/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { EventHandler, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { schema } from "./schema";
 import Select from "@/ui/Select";
 import { optionLocations, optionTypes } from "@/data/data";
 import Button from "@/ui/Button";
 import toast from "react-hot-toast";
-
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { createNewListing } from "./api";
 const page = () => {
   const imageRef = useRef(null);
+  const router = useRouter();
   const [images, setImages] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -25,30 +29,81 @@ const page = () => {
       hasFreeWifi: false,
       type: "luxury",
       location: "erbil",
-      pricePerNight: 400,
+      priceNight: 400,
     },
   });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: ({ data, imageUrls }: { data: any; imageUrls: any }) =>
+      createNewListing(data, imageUrls),
+    mutationKey: ["listing"],
+  });
+
   useEffect(() => {
-    console.log(images);
+    if (Object.keys(errors).length > 0) {
+      Object.keys(errors).map((error) => {
+        toast.error(errors[error].message);
+      });
+    }
   }, []);
 
-  const uploadImages = (image: string, idx: string) => {
+  const uploadImages = async (image: string, idx: number) => {
     // need to get image from input
     // group of images not one image
     // save this images in imagekit as gallery
     // save all data and images in db
     // 1-image with url
-    if (!image) return;
-    const toastId = toast.loading(`image ${idx + 1} uploaded successfully`);
+    if (images.length === 0) return;
+    const upload = [];
+    // for (let i = 0; i < images.length; i++) {
     const formData = new FormData();
     formData.append("file", image);
+    const res = await fetch("/api/listing", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    upload.push(data.url);
+    toast.success(`image ${idx + 1} upload successfully`);
+    // }
+    return upload;
   };
 
-  const handleChange = (e: any) => {
-    setImages((prev) => [...prev, e.target.files[0]]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImages((prev) => {
+      return [...prev, e.target.files[0]];
+    });
   };
 
-  const onSubmit = (data: {}) => {
+  const onSubmit = async (data: any) => {
+    // try {
+    //   const imageUrls = await uploadImages();
+    //   const payload = {
+    //     ...data,
+    //     images: imageUrls,
+    //   };
+
+    //   await fetch("/api/listing", {
+    //     method: "POST",
+    //     body: JSON.stringify(payload),
+    //   });
+    //   toast.success("listing created");
+    // } catch (error) {
+    //   toast.error(error);
+    // }
+
+    if (!images?.length) return toast.error("Tou must publish an image!");
+
+    const imageUrls = await Promise.all(
+      images.map((image, idx) => {
+        const imageUrl = uploadImages(image, idx);
+        return imageUrl;
+      })
+    );
+    const newListing = await mutateAsync({ data, imageUrls });
+    toast.success("Redirecting to listing ....");
+    router.push(`/details/${newListing?.id}`);
     console.log(data);
   };
 
@@ -82,14 +137,14 @@ const page = () => {
           <Input
             placeholder="$249.02"
             type="number"
-            register={(register("pricePerNight"), { valueAsNumber: true })}
+            register={register("priceNight")}
             isShadow={false}
             step={0.01}
           />
           <Input
             placeholder="$249.02"
             type="number"
-            register={(register("pricePerNight"), { valueAsNumber: true })}
+            register={register("priceNight")}
             isShadow={false}
             step={0.1}
           />
@@ -110,24 +165,24 @@ const page = () => {
             </label>
             <input
               type="file"
-              className=""
               style={{ display: "none" }}
               ref={imageRef}
               onChange={handleChange}
               accept="images/"
             />
+
             <button
+              className="bg-red-600 text-white rounded px-2 py-1"
               onClick={() => {
                 imageRef.current.click();
               }}
             >
-              click
+              select images
             </button>
           </div>{" "}
           <Button
             text="Create"
             className="bg-red-600 rounded w-full py-3 hover:bg-red-700 text-white text-lg m-auto"
-            disabled={false}
           />
         </form>
       </div>
