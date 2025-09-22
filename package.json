@@ -26,6 +26,7 @@
     "next": "^15.5.2",
     "next-auth": "^4.24.11",
     "openssl": "^2.0.0",
+    "plaiceholder": "^3.0.0",
     "react": "19.1.0",
     "react-date-range": "^2.0.1",
     "react-dom": "19.1.0",

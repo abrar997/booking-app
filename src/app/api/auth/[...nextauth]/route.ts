@@ -3,6 +3,7 @@ import NextAuth, { SessionStrategy } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import db from "@/lib/db";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { string } from "zod";
 
 export const authOptions = {
   adapter: PrismaAdapter(db),
@@ -46,12 +47,15 @@ export const authOptions = {
     jwt({ token, user }) {
       if (user) {
         token.isAdmin = user.isAdmin;
-
-        return token;
+        token.id = user.id;
       }
+      return token;
     },
     session({ session, token }) {
-      session.user.isAdmin = token.isAdmin;
+      if (token) {
+        session.user.id = token.is as string;
+        session.user.isAdmin = token.isAdmin as boolean;
+      }
       return session;
     },
   },

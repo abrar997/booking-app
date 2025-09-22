@@ -123,7 +123,7 @@ const page = () => {
             type="number"
             register={register("beds")}
             isShadow={false}
-            step={0.1}
+            step={1}
           />
           <div className="text-slate-400 ml-4 w-2/3 flex gap-1">
             <label htmlFor="">Free Wifi</label>

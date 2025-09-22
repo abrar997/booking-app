@@ -1,31 +1,11 @@
-import { getCurrentUser } from "@/lib/currentUser";
 import db from "@/lib/db";
-import isAdminUser from "@/lib/isAdminUser";
 import { NextResponse } from "next/server";
-
-export async function GET(req: any) {
-  try {
-    const listings = await db.listing.findMany({
-      take: 10,
-    });
-    return NextResponse.json(listings);
-  } catch (error) {
-    return NextResponse.json(error);
-  }
-}
 
 export async function POST(req: any) {
   try {
-    await isAdminUser();
-
-    const currentUser = await getCurrentUser();
-    if (!currentUser?.isAdmin) {
-      return NextResponse.json({ message: "user must be an admin " });
-    }
-
     const body = await req.json();
     Object.values(body).forEach((v) => {
-      if (v === "") return NextResponse.json({ message: "Fill all fields !" });
+      if (v === "") return NextResponse.json({ message: "Fill all fields!" });
     });
     const {
       name,
@@ -50,6 +30,7 @@ export async function POST(req: any) {
         imageUrls,
       },
     });
+
     return NextResponse.json(newListing);
   } catch (error) {
     return NextResponse.json(error);
