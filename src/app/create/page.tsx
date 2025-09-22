@@ -1,7 +1,7 @@
 "use client";
 import Input from "@/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { schema } from "./schema";
 import Select from "@/ui/Select";
@@ -11,10 +11,10 @@ import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { createNewListing } from "./api";
+
 const page = () => {
-  const imageRef = useRef(null);
   const router = useRouter();
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<File[]>([]);
 
   const {
     register,
@@ -34,9 +34,9 @@ const page = () => {
   });
 
   const { mutateAsync } = useMutation({
-    mutationFn: ({ data, imageUrls }: { data: any; imageUrls: any }) =>
+    mutationFn: ({ data, imageUrls }: { data: {}; imageUrls: string[] }) =>
       createNewListing(data, imageUrls),
-    mutationKey: ["listing"],
+    mutationKey: ["listings"],
   });
 
   useEffect(() => {
@@ -45,29 +45,30 @@ const page = () => {
         toast.error(errors[error].message);
       });
     }
-  }, []);
+  }, [errors]);
 
-  const uploadImages = async (image: string, idx: number) => {
-    // need to get image from input
-    // group of images not one image
-    // save this images in imagekit as gallery
-    // save all data and images in db
-    // 1-image with url
-    if (images.length === 0) return;
-    const upload = [];
-    // for (let i = 0; i < images.length; i++) {
+  const uploadImage = async (image: File, idx: number): Promise<string> => {
+    if (!image) return;
+
+    const toastId = toast.loading(`Image${idx + 1} is being uploaded`);
+
     const formData = new FormData();
     formData.append("file", image);
-    const res = await fetch("/api/listing", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
 
-    upload.push(data.url);
-    toast.success(`image ${idx + 1} upload successfully`);
-    // }
-    return upload;
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Failed to upload image");
+      toast.success(`successfully uploaded Image ${idx + 1}`);
+      toast.dismiss(toastId);
+      const { url } = await res.json();
+      return url;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,34 +78,10 @@ const page = () => {
   };
 
   const onSubmit = async (data: any) => {
-    // try {
-    //   const imageUrls = await uploadImages();
-    //   const payload = {
-    //     ...data,
-    //     images: imageUrls,
-    //   };
-
-    //   await fetch("/api/listing", {
-    //     method: "POST",
-    //     body: JSON.stringify(payload),
-    //   });
-    //   toast.success("listing created");
-    // } catch (error) {
-    //   toast.error(error);
-    // }
-
-    if (!images?.length) return toast.error("Tou must publish an image!");
-
-    const imageUrls = await Promise.all(
-      images.map((image, idx) => {
-        const imageUrl = uploadImages(image, idx);
-        return imageUrl;
-      })
-    );
+    const imageUrls = await Promise.all(images.map(uploadImage));
     const newListing = await mutateAsync({ data, imageUrls });
-    toast.success("Redirecting to listing ....");
-    router.push(`/details/${newListing?.id}`);
-    console.log(data);
+    toast.success("Listing created successfully");
+    router.push(`/details/${newListing.id}`);
   };
 
   return (
@@ -116,8 +93,8 @@ const page = () => {
           </h3>
         </div>
         <form
-          action=""
           onSubmit={handleSubmit(onSubmit)}
+          action=""
           className="px-4 py-6 flex flex-col items-center gap-8"
         >
           <Input
@@ -139,12 +116,12 @@ const page = () => {
             type="number"
             register={register("priceNight")}
             isShadow={false}
-            step={0.01}
+            step={0.1}
           />
           <Input
-            placeholder="$249.02"
+            placeholder="3"
             type="number"
-            register={register("priceNight")}
+            register={register("beds")}
             isShadow={false}
             step={0.1}
           />
@@ -158,28 +135,19 @@ const page = () => {
           </div>
           <div className="text-slate-400 w-2/3 flex gap-1">
             <label
-              htmlFor=""
+              htmlFor="file"
               className="text-slate-400 border p-2 rounded w-2/3"
             >
               upload images
             </label>
             <input
               type="file"
+              id="file"
               style={{ display: "none" }}
-              ref={imageRef}
               onChange={handleChange}
-              accept="images/"
+              // accept="image/"
             />
-
-            <button
-              className="bg-red-600 text-white rounded px-2 py-1"
-              onClick={() => {
-                imageRef.current.click();
-              }}
-            >
-              select images
-            </button>
-          </div>{" "}
+          </div>
           <Button
             text="Create"
             className="bg-red-600 rounded w-full py-3 hover:bg-red-700 text-white text-lg m-auto"
